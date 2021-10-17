@@ -2,7 +2,9 @@ package ioutils;
 
 
 
+import pojos.HourMeasurement;
 import pojos.Station;
+import pojos.TemperatureMeasure;
 
 
 import java.io.IOException;
@@ -12,7 +14,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataReader {
@@ -28,23 +33,37 @@ public class DataReader {
         return result;
     }
 
-    public static void main(String[] args) {
-        Stream<String> fileData = getFile(DATA_DIR + SEPARATOR + "calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
-        Station station = fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equals("Leganés")).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst().get();
-        System.out.println(station);
-//        StringTokenizer tokenizer = new StringTokenizer(fileData, "\n");
-//        tokenizer.nextToken();
-//        Map<String, Station> estaciones = new HashMap<String, Station>();
-//        while(tokenizer.hasMoreTokens()){
-//            StringTokenizer subToken = new StringTokenizer(tokenizer.nextToken(), ";");
-//            String key = subToken.nextToken();
-//            String zone = subToken.nextToken();
-//            String value = subToken.nextToken();
-//            estaciones.put(key, new Station(key, zone, value));
-//        }
-//        estaciones.forEach((c, k) -> System.out.println(c + " " + k));
-//        String[] estaciones = fileData.split(";");
-//        Arrays.stream(estaciones).forEach(System.out::println);
+    public static Station getStation(String city) {
+        Stream<String> fileData = getFile("calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
+        return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst().get();
     }
 
+    public static Stream<String> getStationDataStream (Station station)
+    {
+        Stream<String> data = getFile("calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
+        return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
+    }
+
+    private static List<TemperatureMeasure> getTemperatureMeasures(Stream<String> data) {
+        List<TemperatureMeasure> measuresList = data.map(s -> Arrays.asList(s.split(";"))).map(list -> {
+            HourMeasurement[] measures = new HourMeasurement[24];
+            for (int i = 0; i < measures.length; i++) {
+                List<String> measurement= list.subList(8 + i * 2, 8 + i * 2 + 2);
+                float value = 0;
+                if (!measurement.get(0).equals("")) {
+                    value = Float.parseFloat(measurement.get(0).replace(',', '.'));
+                }
+                measures[i] = new HourMeasurement(i , value, measurement.get(1).charAt(0));
+            }
+            LocalDate date = LocalDate.of(Integer.parseInt(list.get(5)), Integer.parseInt(list.get(6)), Integer.parseInt(list.get(7)));
+            return new TemperatureMeasure("typePlaceHolder", date, measures);
+        }).collect(Collectors.toList());
+        return measuresList;
+    }
+
+    public static void main (String[] args) {
+        Stream<String> data = getStationDataStream(getStation("Guadalix de la Sierra"));
+        List<TemperatureMeasure> measuresList = getTemperatureMeasures(data);
+        measuresList.stream().forEach(System.out::println);
+    }
 }
