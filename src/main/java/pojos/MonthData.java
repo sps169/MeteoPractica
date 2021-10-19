@@ -2,20 +2,17 @@ package pojos;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Data
-public class MonthTemperatureData {
-    private ArrayList<TemperatureMeasure> measures;
+public class MonthData {
+    private ArrayList<Measure> measures;
     private Moment maxTemperature;
     private Moment minTemperature;
     private float meanTemperature;
     /* todo graph */
 
-    public MonthTemperatureData(ArrayList<TemperatureMeasure> measures) {
+    public MonthData(ArrayList<Measure> measures) {
          this.measures = measures;
     }
 //

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class TemperatureMeasure {
+public class Measure {
     private String type;
     private LocalDate day;
     private HourMeasurement[] dayMeasurements;
