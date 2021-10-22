@@ -12,5 +12,5 @@ import java.util.List;
 public class Measure {
     private String type;
     private LocalDate day;
-    private HourMeasurement[] dayMeasurements;
+    private List<HourMeasurement> dayMeasurements;
 }
