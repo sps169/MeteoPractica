@@ -9,5 +9,5 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Moment {
     private LocalDateTime date;
-    private int value;
+    private Float value;
 }
