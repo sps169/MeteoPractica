@@ -1,8 +1,6 @@
 package ioutils;
 
-import pojos.HourMeasurement;
-import pojos.Station;
-import pojos.Measure;
+import pojos.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,9 +8,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,22 +33,23 @@ public class DataReader {
     public static Stream<String> getStationDataStream (Station station)
     {
         Stream<String> data = getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
+        data = Stream.concat(data, getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_mes.csv", Charset.forName("windows-1252")));
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 
-    public static List<Measure> getTemperatureMeasures(Stream<String> data) {
+    public static List<Measure> getMeasures(Stream<String> data) {
         List<Measure> measuresList = data.map(s -> Arrays.asList(s.split(";"))).map(list -> {
-            HourMeasurement[] measures = new HourMeasurement[24];
-            for (int i = 0; i < measures.length; i++) {
+            List<HourMeasurement> measures = new ArrayList<>();
+            for (int i = 0; i < 24; i++) {
                 List<String> measurement= list.subList(8 + i * 2, 8 + i * 2 + 2);
                 float value = 0;
                 if (!measurement.get(0).equals("")) {
                     value = Float.parseFloat(measurement.get(0).replace(',', '.'));
                 }
-                measures[i] = new HourMeasurement(i + 1 , value, measurement.get(1).charAt(0));
+                measures.add(new HourMeasurement(i + 1 , value, measurement.get(1).charAt(0)));
             }
             LocalDate date = LocalDate.of(Integer.parseInt(list.get(5)), Integer.parseInt(list.get(6)), Integer.parseInt(list.get(7)));
-            return new Measure("typePlaceHolder", date, measures);
+            return new Measure( list.get(3), date, measures);
         }).collect(Collectors.toList());
         return measuresList;
     }
@@ -65,7 +62,8 @@ public class DataReader {
             data = getStationDataStream((station));
         else
             System.err.println("No esiste siudad equisde");
-        List<Measure> measuresList = getTemperatureMeasures(data);
-        measuresList.stream().forEach(System.out::println);
+        List<Measure> measuresList = getMeasures(data);
+        Comparator comparador = Comparator.comparing(HourMeasurement::getValue);
+       // measuresList.stream().filter(y -> y.getType().equals("83")).map(s -> s.getDayMeasurements()).map(day -> day.stream().reduce()).forEach(System.out::println);
     }
 }
