@@ -5,9 +5,8 @@ import pojos.Station;
 
 import ioutils.DataReader;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,8 +21,11 @@ public class Main {
         else
             System.err.println("No esiste siudad equisde");
         List<Measure> measuresList = DataReader.getMeasures(data);
-
-        MonthData monthData = new MonthData(measuresList.stream().filter(s -> s.getType().equals("83")).collect(Collectors.toList()), "83");
-        System.out.println(monthData);
+        List<String> magnitudes = DataReader.getFile("magnitudes_aire.csv", Charset.defaultCharset()).map(s -> Arrays.asList(s.split(";"))).map(t -> t.get(0)).collect(Collectors.toList());
+        List<MonthData> informe = new ArrayList<>();
+        for (String type: magnitudes) {
+            informe.add(new MonthData(measuresList.stream().filter(s -> s.getType().equals(type)).collect(Collectors.toList()), type));
+        }
+        informe.stream().forEach(System.out::println);
     }
 }

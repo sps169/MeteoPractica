@@ -18,7 +18,7 @@ public class DataReader {
     public static Stream<String> getFile(String path, Charset charset){
         Stream<String> result = null;
         try {
-            result = Files.lines(Paths.get(path), charset);
+            result = Files.lines(Paths.get(DATA_DIR + SEPARATOR + path), charset);
         } catch (IOException ex) {
             System.err.println("Error de lectura de datos");
         }
@@ -26,14 +26,14 @@ public class DataReader {
     }
 
     public static Optional<Station> getStation(String city) {
-        Stream<String> fileData = getFile(DATA_DIR + SEPARATOR + "calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
+        Stream<String> fileData = getFile("calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
         return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst();
     }
 
     public static Stream<String> getStationDataStream (Station station)
     {
-        Stream<String> data = getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
-        data = Stream.concat(data, getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_mes.csv", Charset.forName("windows-1252")));
+        Stream<String> data = getFile("calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
+        data = Stream.concat(data, getFile("calidad_aire_datos_mes.csv", Charset.forName("windows-1252")));
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 
