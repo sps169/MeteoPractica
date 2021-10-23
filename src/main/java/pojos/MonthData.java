@@ -2,19 +2,20 @@ package pojos;
 
 import lombok.Data;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
 public class MonthData {
     private List<Measure> measures;
-    private String type;
+    private Magnitude type;
     private Moment maxMeasure;
     private Moment minMeasure;
     private double meanValueOfMeasures;
     /* todo graph */
 
-    public MonthData(List<Measure> measures, String type) {
+    public MonthData(List<Measure> measures, Magnitude type) {
         this.measures = measures;
         if (measures.size() != 0) {
             this.maxMeasure = measures.stream().max((s, t) -> Float.compare(s.getMaxValue().getValue(), t.getMaxValue().getValue())).get().getMaxValue();
