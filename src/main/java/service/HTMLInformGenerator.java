@@ -1,6 +1,9 @@
-package ioutils;
+package service;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class HTMLInformGenerator {
     private final static String uri = "";
