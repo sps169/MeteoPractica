@@ -35,7 +35,7 @@ public class Analytics {
         for (MonthData monthData:
                 this.data) {
 
-            if (monthData.getType().equals("89")){
+            if (false) {//monthData.getType().getCodMagnitude().equals("89")){
                 HistogramDataset hDataSet = new HistogramDataset();
                 for (Measure measure:monthData.getMeasures()
                      ) {
@@ -55,7 +55,7 @@ public class Analytics {
                 }
                 JFreeChart egChart = ChartFactory.createBarChart("JFreeChart Histogram",
                         "Days", "Quantity", egDataSet);
-                chart = Files.createFile(Path.of(uri+File.separator+"images"+File.separator+"gechart"+monthData.getType()+".png")).toFile();
+                chart = Files.createFile(Path.of(uri+File.separator+"images"+File.separator+"gechart"+monthData.getType().getCodMagnitude()+".png")).toFile();
                 ChartUtils.saveChartAsPNG(chart, egChart, 600, 400);
             }
         }

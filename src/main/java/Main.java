@@ -24,7 +24,7 @@ public class Main {
         List<Magnitude> magnitudes = DataReader.getFile("magnitudes_aire.csv", Charset.defaultCharset()).map(s -> Arrays.asList(s.split(";"))).map(t -> new Magnitude(t.get(0),t.get(1),t.get(4))).collect(Collectors.toList());
         List<MonthData> informe = new ArrayList<>();
         for (Magnitude type: magnitudes) {
-            informe.add(new MonthData(measuresList.stream().filter(s -> s.getMagnitude().getCodMagnitude().equals(type.getCodMagnitude())).collect(Collectors.toList()), type));
+            informe.add(new MonthData(measuresList.stream().filter(s -> s.getMagnitude().equals(type.getCodMagnitude())).collect(Collectors.toList()), type));
         }
         informe.stream().forEach(System.out::println);
         try {

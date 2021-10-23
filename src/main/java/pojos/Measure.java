@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 @Data
 @AllArgsConstructor
 public class Measure {
-    private Magnitude magnitude;
+    private String magnitude;
     private LocalDate day;
     private List<HourMeasurement> dayMeasurements;
 
