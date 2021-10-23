@@ -4,11 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class HTMLInformGenerator {
     private final static String uri = "";
     private String headPart;
-    private String bodyPart;
+    private List<String> bodyPart;
 
     public void generate(String uri) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
@@ -16,9 +17,13 @@ public class HTMLInformGenerator {
         bw.close();
     }
 
-    public HTMLInformGenerator(String headPart, String bodyPart) {
+    public HTMLInformGenerator(String headPart, List<String> bodyPart) {
         this.headPart = "<html>\n<head>\n<title>\n"+headPart+"</title>\n";
-        this.bodyPart = "<body>"+bodyPart+"</body>\n</html>";
+        this.bodyPart.add("<body>\n");
+        for (String string: bodyPart) {
+            this.bodyPart.add(string);
+        }
+        this.bodyPart.add("</body>\n</html>");
     }
 
     public String getHeadPart() {
@@ -29,11 +34,11 @@ public class HTMLInformGenerator {
         this.headPart = "<html>\n<head>\n<title>\n"+headPart+"</title>\n";
     }
 
-    public String getBodyPart() {
+    public List<String> getBodyPart() {
         return bodyPart;
     }
 
-    public void setBodyPart(String bodyPart) {
-        this.bodyPart = "<body>"+bodyPart+"</body>\n</html>";
+    public void setBodyPart(List<String> bodyPart) {
+        this.bodyPart=bodyPart;
     }
 }
