@@ -53,17 +53,4 @@ public class DataReader {
         }).collect(Collectors.toList());
         return measuresList;
     }
-
-    public static void main (String[] args) {
-        Optional<Station> optionalStation = getStation("Leganés");
-        Station station = optionalStation.orElse(null);
-        Stream<String> data = null;
-        if (station != null)
-            data = getStationDataStream((station));
-        else
-            System.err.println("No esiste siudad equisde");
-        List<Measure> measuresList = getMeasures(data);
-        Comparator comparador = Comparator.comparing(HourMeasurement::getValue);
-       // measuresList.stream().filter(y -> y.getType().equals("83")).map(s -> s.getDayMeasurements()).map(day -> day.stream().reduce()).forEach(System.out::println);
-    }
 }
