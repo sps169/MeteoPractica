@@ -16,11 +16,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 public class Analytics {
-    private List<MonthData> data;
+    private List<MonthData> contaminationData;
+    private List<MonthData> meteorologyData;
     private String uri;
 
-    public Analytics (List<MonthData> data,String uri) throws IOException {
-        this.data=data;
+    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData,String uri) throws IOException {
+        this.contaminationData =contaminationData;
+        this.meteorologyData = meteorologyData;
         this.uri = uri;
         generateChart();
     }
@@ -28,7 +30,7 @@ public class Analytics {
         List<String> body= new ArrayList<>();
         body.add("<h1>"+city+"</h1>\n"+"<h2>Start Date of Measures: </h2>\n"+"<h2>End Date of Measures: </h2>\n"+"<h2>Name of Stations: "+stations+"</h2>\n<h2>Measures Information:</h2>\n");
         for (MonthData monthData:
-                this.data) {
+                this.contaminationData) {
             if(monthData.getMaxMeasure()!=null){
                 if(!monthData.getType().getCodMagnitude().equals("89")){
                     body.add("<table>\n<tr>\n<th>"+monthData.getType().getDescription()+"</th>\n</tr>\n");
@@ -61,7 +63,7 @@ public class Analytics {
         }
         File chart;
         for (MonthData monthData:
-                this.data) {
+                this.contaminationData) {
 
             if (false) {//monthData.getType().getCodMagnitude().equals("89")){
                 HistogramDataset hDataSet = new HistogramDataset();

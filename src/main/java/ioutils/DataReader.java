@@ -25,15 +25,14 @@ public class DataReader {
         return result;
     }
 
-    public static Optional<Station> getStation(String city) {
-        Stream<String> fileData = getFile("calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
+    public static Optional<Station> getStation(String city, String stationFile) {
+        Stream<String> fileData = getFile(stationFile, Charset.forName("windows-1252"));
         return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst();
     }
 
-    public static Stream<String> getStationDataStream (Station station)
+    public static Stream<String> getStationDataStream (Station station, String file)
     {
-        Stream<String> data = getFile("calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
-        data = Stream.concat(data, getFile("calidad_aire_datos_mes.csv", Charset.forName("windows-1252")));
+        Stream<String> data = getFile(file, Charset.forName("windows-1252"));
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 

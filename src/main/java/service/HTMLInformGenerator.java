@@ -1,9 +1,13 @@
 package service;
 
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class HTMLInformGenerator {
@@ -12,8 +16,11 @@ public class HTMLInformGenerator {
     private List<String> bodyPart;
 
     public void generate(String uri) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
-        bw.write(this.headPart +this.bodyPart);
+        Files.deleteIfExists(Path.of(uri));
+        Files.createDirectory(Path.of(uri));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(uri + File.separator + "ciudad-dd-mm-aaaa.html"));
+        bw.write(this.headPart + this.bodyPart);
+        Desktop.getDesktop().browse(URI.create(uri + File.separator + "ciudad-dd-mm-aaaa.html"));
         bw.close();
     }
 
