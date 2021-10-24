@@ -7,6 +7,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import pojos.Measure;
 import pojos.MonthData;
+import pojos.Station;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +19,19 @@ import java.util.List;
 public class Analytics {
     private List<MonthData> contaminationData;
     private List<MonthData> meteorologyData;
+    private Station station;
     private String uri;
 
-    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData,String uri) throws IOException {
+    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, String uri) throws IOException {
         this.contaminationData =contaminationData;
         this.meteorologyData = meteorologyData;
+        this.station = station;
         this.uri = uri;
         generateChart();
     }
-    public List<String> generatorHTMLBody(String city,String stations){
+    public List<String> generatorHTMLBody(){
         List<String> body= new ArrayList<>();
-        body.add("<h1>"+city+"</h1>\n"+"<h2>Start Date of Measures: </h2>\n"+"<h2>End Date of Measures: </h2>\n"+"<h2>Name of Stations: "+stations+"</h2>\n<h2>Measures Information:</h2>\n");
+        body.add("<h1>"+this.station.getStationCity()+"</h1>\n"+"<h2>Start Date of Measures: </h2>\n"+"<h2>End Date of Measures: </h2>\n"+"<h2>Name of Stations: "+this.station.getStationCity()+"</h2>\n<h2>Measures Information:</h2>\n");
         for (MonthData monthData:
                 this.contaminationData) {
             if(monthData.getMaxMeasure()!=null){

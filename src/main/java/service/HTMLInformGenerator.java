@@ -16,8 +16,6 @@ public class HTMLInformGenerator {
     private List<String> bodyPart;
 
     public void generate(String uri) throws IOException {
-        Files.deleteIfExists(Path.of(uri));
-        Files.createDirectory(Path.of(uri));
         BufferedWriter bw = new BufferedWriter(new FileWriter(uri + File.separator + "ciudad-dd-mm-aaaa.html"));
         bw.write(this.headPart + this.bodyPart);
         Desktop.getDesktop().browse(URI.create(uri + File.separator + "ciudad-dd-mm-aaaa.html"));
