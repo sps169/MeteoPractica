@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,7 @@ public class Analytics {
             }
         }
     }
-    public void generateChart() throws IOException {
+    public void generateChart(List<MonthData> monthDataList) throws IOException {
         if(!Files.exists(this.uri)){
             Files.createDirectory(this.uri);
         }

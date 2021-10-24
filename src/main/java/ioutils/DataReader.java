@@ -4,10 +4,7 @@ import pojos.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +23,17 @@ public class DataReader {
         return result;
     }
 
+    private static void deleteDirectory(Path path) throws IOException {
+        if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
+                for (Path directory : directoryStream) {
+                    deleteDirectory(directory);
+                }
+            }
+        }
+        Files.delete(path);
+    }
+
     public static Path createDirectory(String uri) {
         if (Files.exists(Path.of(uri))) {
             Scanner scanner = new Scanner(System.in);
@@ -36,7 +44,9 @@ public class DataReader {
                 if (answer.equalsIgnoreCase("yes")) {
                     correctAnswer = true;
                     try {
-                        Files.deleteIfExists(Path.of(uri));
+                        if (Files.exists(Path.of(uri))){
+                            deleteDirectory(Path.of(uri));
+                        }
                     }catch (IOException e) {
                         System.err.println("Couldn't delete directory");
                     }
