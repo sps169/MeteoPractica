@@ -8,6 +8,10 @@ import java.util.Comparator;
 
 @Data
 @AllArgsConstructor
+
+/**
+ * 
+ */
 public class Moment {
     private LocalDateTime date;
     private Float value;

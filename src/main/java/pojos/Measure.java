@@ -15,6 +15,13 @@ import java.util.stream.Stream;
 
 @Data
 @AllArgsConstructor
+
+/**
+ * Class that contains the hourly measurements of a day.
+ * @serialField magnitude String code that represents a magnitude.
+ * @serialField day {@LocalDate} date in which the measures where taken.
+ * @serialField dayMeasurements List of {@HourMeasurement} of a day.
+ */
 public class Measure {
     private String magnitude;
     private LocalDate day;

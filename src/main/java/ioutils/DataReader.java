@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
@@ -23,6 +24,35 @@ public class DataReader {
             System.err.println("Error de lectura de datos");
         }
         return result;
+    }
+
+    public static Path createDirectory(String uri) {
+        if (Files.exists(Path.of(uri))) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Would you like to erase the existing output directory? (yes/no)");
+            boolean correctAnswer = false;
+            while (!correctAnswer){
+                String answer = scanner.next();
+                if (answer.equalsIgnoreCase("yes")) {
+                    correctAnswer = true;
+                    try {
+                        Files.deleteIfExists(Path.of(uri));
+                    }catch (IOException e) {
+                        System.err.println("Couldn't delete directory");
+                    }
+                } else if (answer.equalsIgnoreCase("no")) {
+                    correctAnswer = true;
+                }
+                scanner.nextLine();
+            }
+        }
+        Path directoryPath = null;
+        try {
+            directoryPath = Files.createDirectory(Path.of(uri));
+        }catch (IOException e) {
+            System.err.println("Couldn't create output directory");
+        }
+        return directoryPath;
     }
 
     public static Optional<Station> getStation(String city, String stationFile) {

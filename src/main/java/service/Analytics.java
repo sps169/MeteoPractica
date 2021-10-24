@@ -29,9 +29,9 @@ public class Analytics {
     private List<MonthData> meteorologyData;
     private List<String> contentHtml;
     private Station station;
-    private String uri;
+    private Path uri;
 
-    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, String uri) throws IOException {
+    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, Path uri) throws IOException {
         this.contaminationData =contaminationData;
         this.meteorologyData = meteorologyData;
         this.contentHtml = new ArrayList<>();
@@ -96,9 +96,9 @@ public class Analytics {
             }
         }
     }
-    public void generateChart(List<MonthData> monthDataList) throws IOException {
-        if(!Files.exists(Path.of(this.uri))){
-            Files.createDirectory(Paths.get(this.uri));
+    public void generateChart() throws IOException {
+        if(!Files.exists(this.uri)){
+            Files.createDirectory(this.uri);
         }
         File chart;
         for (MonthData monthData:monthDataList) {

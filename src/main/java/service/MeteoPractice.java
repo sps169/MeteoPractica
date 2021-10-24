@@ -25,7 +25,8 @@ public class MeteoPractice {
     private static final String MAGNITUDES_FILE = "magnitudes_aire.csv";
     private static final String MAGNITUDES_METEO_FILE = "magnitudes_aire_meteo.csv";
     private static final String CSV_SEPARATOR = ";";
-    public static Analytics generateMeteoAnalysis (String city, String directory) {
+    public static Analytics generateMeteoAnalysis (String city, String directoryURI) {
+        Path directory = DataReader.createDirectory(directoryURI);
         Station station = DataReader.getStation(city, STATIONS_FILE).orElse(null);
         Stream<String> contaminationStream = null;
         Stream<String> meteorologyStream = null;
