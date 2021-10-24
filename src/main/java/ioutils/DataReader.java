@@ -4,9 +4,7 @@ import pojos.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,22 +16,63 @@ public class DataReader {
     public static Stream<String> getFile(String path, Charset charset){
         Stream<String> result = null;
         try {
-            result = Files.lines(Paths.get(path), charset);
+            result = Files.lines(Paths.get(DATA_DIR + SEPARATOR + path), charset);
         } catch (IOException ex) {
             System.err.println("Error de lectura de datos");
         }
         return result;
     }
 
-    public static Optional<Station> getStation(String city) {
-        Stream<String> fileData = getFile(DATA_DIR + SEPARATOR + "calidad_aire_estaciones.csv", Charset.forName("windows-1252"));
+    private static void deleteDirectory(Path path) throws IOException {
+        if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+            try (DirectoryStream<Path> pathStream = Files.newDirectoryStream(path)) {
+                for (Path killable : pathStream) {
+                    deleteDirectory(killable);
+                }
+            }
+        }
+        Files.delete(path);
+    }
+
+    public static Path createDirectory(String uri) {
+        Path directoryPath = null;
+        if (Files.exists(Path.of(uri))) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Would you like to erase the existing output directory? (yes/no)");
+            boolean correctAnswer = false;
+            while (!correctAnswer){
+                String answer = scanner.next();
+                if (answer.equalsIgnoreCase("yes")) {
+                    correctAnswer = true;
+                    try {
+                        if (Files.exists(Path.of(uri))){
+                            deleteDirectory(Path.of(uri));
+                        }
+                    }catch (IOException e) {
+                        System.err.println("Couldn't delete directory");
+                    }
+                    try {
+                        directoryPath = Files.createDirectory(Path.of(uri));
+                    }catch (IOException e) {
+                        System.err.println("Couldn't create output directory");
+                    }
+                } else if (answer.equalsIgnoreCase("no")) {
+                    correctAnswer = true;
+                }
+                scanner.nextLine();
+            }
+        }
+        return directoryPath;
+    }
+
+    public static Optional<Station> getStation(String city, String stationFile) {
+        Stream<String> fileData = getFile(stationFile, Charset.forName("windows-1252"));
         return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst();
     }
 
-    public static Stream<String> getStationDataStream (Station station)
+    public static Stream<String> getStationDataStream (Station station, String file)
     {
-        Stream<String> data = getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_meteo_mes.csv", Charset.forName("windows-1252"));
-        data = Stream.concat(data, getFile(DATA_DIR + SEPARATOR + "calidad_aire_datos_mes.csv", Charset.forName("windows-1252")));
+        Stream<String> data = getFile(file, Charset.forName("windows-1252"));
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 

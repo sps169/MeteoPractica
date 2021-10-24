@@ -1,26 +1,29 @@
-import pojos.HourMeasurement;
-import pojos.Measure;
-import pojos.Station;
+import pojos.*;
 
 import ioutils.DataReader;
+import service.Analytics;
+import service.MeteoPractice;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
 
     public static void main (String[] args) {
-        Optional<Station> optionalStation = DataReader.getStation("Leganés");
-        Station station = optionalStation.orElse(null);
-        Stream<String> data = null;
-        if (station != null)
-            data = DataReader.getStationDataStream((station));
-        else
-            System.err.println("No esiste siudad equisde");
-        List<Measure> measuresList = DataReader.getMeasures(data);
-        Comparator comparador = Comparator.comparing(HourMeasurement::getValue);
-        measuresList.stream().filter(y -> y.getType().equals("83")).forEach(System.out::println);
+        long initialTime = System.currentTimeMillis();
+        Analytics analysis = MeteoPractice.generateMeteoAnalysis(args[0], args[1]);
+        if (analysis!= null) {
+            analysis.htmlBuilder(initialTime);
+            try {
+                analysis.generateHtml();
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

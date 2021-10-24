@@ -4,4 +4,6 @@
 /.idea
 *.iml
 /target
-/out
+/out/
+/data/images/
+/data/output/
