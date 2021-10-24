@@ -9,6 +9,8 @@ import pojos.Station;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +42,7 @@ public class MeteoPractice {
             }
             Analytics generalReport = null;
             try {
-                generalReport = new Analytics(meteorologyReport, contaminationReport, directory);
+                generalReport = new Analytics(meteorologyReport, contaminationReport, station, directory);
             } catch (IOException e) {
                 System.err.println("There is a problem with save directory");
             }
