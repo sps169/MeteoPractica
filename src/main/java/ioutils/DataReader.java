@@ -25,9 +25,9 @@ public class DataReader {
 
     private static void deleteDirectory(Path path) throws IOException {
         if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
-            try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
-                for (Path directory : directoryStream) {
-                    deleteDirectory(directory);
+            try (DirectoryStream<Path> pathStream = Files.newDirectoryStream(path)) {
+                for (Path killable : pathStream) {
+                    deleteDirectory(killable);
                 }
             }
         }

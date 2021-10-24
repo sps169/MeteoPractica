@@ -43,7 +43,7 @@ public class Analytics {
     }
 
     public void generateHtml() throws IOException, URISyntaxException {
-        String filePath = this.uri + File.separator + station.getStationCity()+"-"+LocalDate.now()+".html";
+        String filePath = this.uri + File.separator + station.getStationCity()+"-"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"))+".html";
         if(Files.exists(Path.of(filePath))){
             Files.delete(Path.of(filePath));
         }
