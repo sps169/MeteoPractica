@@ -23,6 +23,7 @@ public class MeteoPractice {
     private static final String METEOROLOGY_FILE = "calidad_aire_datos_meteo_mes.csv";
     private static final String CONTAMINATION_FILE = "calidad_aire_datos_mes.csv";
     private static final String MAGNITUDES_FILE = "magnitudes_aire.csv";
+    private static final String MAGNITUDES_METEO_FILE = "magnitudes_aire_meteo.csv";
     private static final String CSV_SEPARATOR = ";";
     public static Analytics generateMeteoAnalysis (String city, String directory) {
         Station station = DataReader.getStation(city, STATIONS_FILE).orElse(null);
@@ -33,16 +34,20 @@ public class MeteoPractice {
             meteorologyStream = DataReader.getStationDataStream(station, METEOROLOGY_FILE);
             List<Measure> contaminationMeasuresList = DataReader.getMeasures(contaminationStream);
             List<Measure> meteorologyMeasuresList = DataReader.getMeasures(meteorologyStream);
-            List<Magnitude> magnitudes = DataReader.getFile(MAGNITUDES_FILE, Charset.defaultCharset()).map(s -> Arrays.asList(s.split(CSV_SEPARATOR))).map(t -> new Magnitude(t.get(0),t.get(1),t.get(4))).collect(Collectors.toList());
+            List<Magnitude> magnitudes = DataReader.getFile(MAGNITUDES_FILE, Charset.forName("windows-1252")).map(s -> Arrays.asList(s.split(CSV_SEPARATOR))).map(t -> new Magnitude(t.get(0),t.get(1),t.get(4))).collect(Collectors.toList());
+            List<Magnitude> magnitudesMeteo = DataReader.getFile(MAGNITUDES_METEO_FILE, Charset.forName("windows-1252")).map(s -> Arrays.asList(s.split(CSV_SEPARATOR))).map(t -> new Magnitude(t.get(0),t.get(1),t.get(4))).collect(Collectors.toList());
             List<MonthData> contaminationReport = new ArrayList<>();
             List<MonthData> meteorologyReport = new ArrayList<>();
             for (Magnitude type: magnitudes) {
-                meteorologyReport.add(new MonthData(meteorologyMeasuresList.stream().filter(s -> s.getMagnitude().equals(type.getCodMagnitude())).collect(Collectors.toList()), type));
+
                 contaminationReport.add(new MonthData(contaminationMeasuresList.stream().filter(s -> s.getMagnitude().equals(type.getCodMagnitude())).collect(Collectors.toList()), type));
+            }
+            for(Magnitude type:magnitudesMeteo){
+                meteorologyReport.add(new MonthData(meteorologyMeasuresList.stream().filter(s -> s.getMagnitude().equals(type.getCodMagnitude())).collect(Collectors.toList()), type));
             }
             Analytics generalReport = null;
             try {
-                generalReport = new Analytics(meteorologyReport, contaminationReport, station, directory);
+                generalReport = new Analytics(contaminationReport,meteorologyReport, station, directory);
             } catch (IOException e) {
                 System.err.println("There is a problem with save directory");
             }
