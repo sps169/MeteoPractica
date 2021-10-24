@@ -43,7 +43,7 @@ public class Analytics {
     }
 
     public void generateHtml() throws IOException, URISyntaxException {
-        String filePath =this.uri + File.separator + station.getStationCity()+"-"+LocalDate.now()+".html";
+        String filePath = this.uri + File.separator + station.getStationCity()+"-"+LocalDate.now()+".html";
         if(Files.exists(Path.of(filePath))){
             Files.delete(Path.of(filePath));
         }
@@ -51,7 +51,10 @@ public class Analytics {
         for (String line:this.contentHtml) {
             Files.write(Path.of(filePath),line.getBytes("windows-1252"), StandardOpenOption.APPEND);
         }
-        String uriPath = filePath.replace("\\","/");
+        String uriPath = filePath;
+        if (uriPath.contains("\\")) {
+            uriPath = filePath.replace("\\","/");
+        }
         Desktop.getDesktop().browse(new URI(uriPath));
     }
 
@@ -98,8 +101,8 @@ public class Analytics {
         }
     }
     public void generateChart(List<MonthData> monthDataList) throws IOException {
-        if(!Files.exists(this.uri)){
-            Files.createDirectory(this.uri);
+        if(!Files.exists(Path.of(this.uri.toAbsolutePath() + File.separator+"images"))){
+            Files.createDirectory(Path.of(this.uri.toAbsolutePath() + File.separator+"images"));
         }
         File chart;
         for (MonthData monthData:monthDataList) {
@@ -144,6 +147,5 @@ public class Analytics {
     private String getEndingDate(){
        return this.meteorologyData.stream().filter(n->!n.equals(null)).map(m->m.getEndDayMeasure()).filter(l->!l.equals(null))
                .max(LocalDate::compareTo).get().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"));
-
     }
 }
