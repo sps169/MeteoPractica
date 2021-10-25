@@ -33,15 +33,15 @@ public class DataReading {
         try {
             result = Files.lines(Paths.get(DATA_DIR + SEPARATOR + path), charset);
         } catch (IOException ex) {
-            System.err.println("Error de lectura de datos");
+            System.err.println("Data reading fatal error.");
         }
         return result;
     }
 
     /**
-     * Method that deletes a directory and EVERYTHING INSIDE OF IT
+     * Method that deletes a directory and EVERYTHING INSIDE OF IT.
      * @param path {@link Path} to be erased.
-     * @throws {@link IOException} if path can't be accesed.
+     * @throws {@link IOException} if path can't be accessed.
      */
     private static void deleteDirectory(Path path) throws IOException {
         if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -54,6 +54,13 @@ public class DataReading {
         Files.delete(path);
     }
 
+    /**
+     * Creates a directory given a {@link String} URI.
+     * If the directory exists, it asks the user if the directory should be erased.
+     * The method returns null if the user doesn't want to erase the directory.
+     * @param uri {@link String} containing the URI.
+     * @return {@link Path} of the new directory if operation was successful, null otherwise.
+     */
     public static Path createDirectory(String uri) {
         Path directoryPath = null;
         if (Files.exists(Path.of(uri))) {
@@ -78,6 +85,7 @@ public class DataReading {
                     }
                 } else if (answer.equalsIgnoreCase("no")) {
                     correctAnswer = true;
+                    System.out.println("Nothing was generated");
                 }
                 scanner.nextLine();
             }
@@ -91,17 +99,36 @@ public class DataReading {
         return directoryPath;
     }
 
+    /**
+     * Gets a {@link Station} from a csv given a {@link String} containing its name.
+     * File is read using the "windows-1252" charset.
+     * @param city {@link String} containing the station name.
+     * @param stationFile {@link String} URI of the csv file where station data is stored.
+     * @return {@link Optional} of {@link Station}.
+     */
     public static Optional<Station> getStation(String city, String stationFile) {
         Stream<String> fileData = getFile(stationFile, Charset.forName("windows-1252"));
         return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst();
     }
 
+    /**
+     * Method that reads from a data csv file filtering its lines by station code.
+     * @param station {@link Station} whose data we want to obtain.
+     * @param file {@link String} containing the URI of the csv data file.
+     * @return {@link Stream<String>} containing the lines filtered by station.
+     */
     public static Stream<String> getStationDataStream (Station station, String file)
     {
         Stream<String> data = getFile(file, Charset.forName("windows-1252"));
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 
+    /**
+     * Method that parses a {@link Stream<String>} containing data lines into
+     * a {@link List} of {@link Measure}. If the stream is empty, the list is returned empty.
+     * @param data {@link Stream} of station data.
+     * @return {@link List} of {@link Measure}
+     */
     public static List<Measure> getMeasures(Stream<String> data) {
         List<Measure> measuresList = data.map(s -> Arrays.asList(s.split(";"))).map(list -> {
             List<HourMeasurement> measures = new ArrayList<>();

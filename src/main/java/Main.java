@@ -1,16 +1,8 @@
-import pojos.*;
-
-import ioutils.DataReader;
 import service.Analytics;
 import service.MeteoPractice;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Main {
 

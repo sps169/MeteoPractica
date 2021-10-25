@@ -5,7 +5,14 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+
+/**
+ * Class that models a Station.
+ */
 public class Station {
+    /**
+     * Stores the stationCode provided by Comunidad de Madrid.
+     */
     private String stationCode;
     private String stationZone;
     private String stationCity;

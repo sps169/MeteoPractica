@@ -6,16 +6,23 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 
-
+/**
+ * Class that models a measurement.
+ */
 public class HourMeasurement {
-    /**
-     * Class that stores a value, its validation (should be 'V', 'N' or 'T') and the hour the value was taken at.
-     * @serialField hour int time of the measurement
-     * @serialField value int value of the measurement
-     * @serialField validation char validation of the measurement
-     */
 
+    /**
+     * int value that stores the hour of measurement
+     */
     private int hour;
+
+    /**
+     * value of the measurement
+     */
     private float value;
+
+    /**
+     * validation of the measurement. It can be {"V", "N", "T"}.
+     */
     private char validation;
 }
