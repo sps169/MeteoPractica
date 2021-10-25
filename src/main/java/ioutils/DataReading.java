@@ -10,9 +10,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DataReader {
+/**
+ * Class that provides file reading utility.
+ */
+public class DataReading {
     public static final String SEPARATOR = FileSystems.getDefault().getSeparator();
+    /**
+     * Default input data directory.
+     */
     public static final String DATA_DIR = System.getProperty("user.dir") + SEPARATOR + "data";
+
+    /**
+     * Method that receives the String path where the file is located
+     * and the {@link Charset} it is encoded with and returns a {@link Stream<String>}
+     * containing its lines.
+     * @param path {@link String} that contains the URI of the file.
+     * @param charset {@link Charset} of the file.
+     * @return {@link Stream<String>} if the file is readable, null Stream otherwise.
+     */
     public static Stream<String> getFile(String path, Charset charset){
         Stream<String> result = null;
         try {
@@ -23,6 +38,11 @@ public class DataReader {
         return result;
     }
 
+    /**
+     * Method that deletes a directory and EVERYTHING INSIDE OF IT
+     * @param path {@link Path} to be erased.
+     * @throws {@link IOException} if path can't be accesed.
+     */
     private static void deleteDirectory(Path path) throws IOException {
         if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
             try (DirectoryStream<Path> pathStream = Files.newDirectoryStream(path)) {
@@ -60,6 +80,12 @@ public class DataReader {
                     correctAnswer = true;
                 }
                 scanner.nextLine();
+            }
+        }else{
+            try {
+                directoryPath = Files.createDirectory(Path.of(uri));
+            }catch (IOException e) {
+                System.err.println("Couldn't create output directory");
             }
         }
         return directoryPath;
