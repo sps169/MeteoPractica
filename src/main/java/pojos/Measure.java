@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Class that models a day worth of data.
+ * @author sps169, FedericoTB
  */
 public class Measure {
 

@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 /**
  * Class that provides file reading utility.
+ * @author sps169, FedericoTB
  */
 public class DataReading {
     public static final String SEPARATOR = FileSystems.getDefault().getSeparator();
@@ -65,9 +66,9 @@ public class DataReading {
         Path directoryPath = null;
         if (Files.exists(Path.of(uri))) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Would you like to erase the existing output directory? (yes/no)");
             boolean correctAnswer = false;
             while (!correctAnswer){
+                System.out.println("Would you like to erase the existing output directory? (yes/no)");
                 String answer = scanner.next();
                 if (answer.equalsIgnoreCase("yes")) {
                     correctAnswer = true;
@@ -104,10 +105,11 @@ public class DataReading {
      * File is read using the "windows-1252" charset.
      * @param city {@link String} containing the station name.
      * @param stationFile {@link String} URI of the csv file where station data is stored.
+     * @param charset {@link Charset} defining the charset of the file to be read.
      * @return {@link Optional} of {@link Station}.
      */
-    public static Optional<Station> getStation(String city, String stationFile) {
-        Stream<String> fileData = getFile(stationFile, Charset.forName("windows-1252"));
+    public static Optional<Station> getStation(String city, String stationFile, Charset charset) {
+        Stream<String> fileData = getFile(stationFile, charset);
         return fileData.filter(s -> Arrays.asList(s.split(";")).get(2).equalsIgnoreCase(city)).map(s -> s.split(";")).map(v -> new Station(v[0], v[1], v[2])).findFirst();
     }
 
@@ -115,11 +117,12 @@ public class DataReading {
      * Method that reads from a data csv file filtering its lines by station code.
      * @param station {@link Station} whose data we want to obtain.
      * @param file {@link String} containing the URI of the csv data file.
+     * @param charset {@link Charset} defining the charset of the file to be read.
      * @return {@link Stream<String>} containing the lines filtered by station.
      */
-    public static Stream<String> getStationDataStream (Station station, String file)
+    public static Stream<String> getStationDataStream (Station station, String file, Charset charset)
     {
-        Stream<String> data = getFile(file, Charset.forName("windows-1252"));
+        Stream<String> data = getFile(file, charset);
         return data.filter(s -> Arrays.asList(s.split(";")).get(4).contains(station.getStationCode()));
     }
 
@@ -132,10 +135,12 @@ public class DataReading {
     public static List<Measure> getMeasures(Stream<String> data) {
         List<Measure> measuresList = data.map(s -> Arrays.asList(s.split(";"))).map(list -> {
             List<HourMeasurement> measures = new ArrayList<>();
+            //for that accesses each couple of values after the starting data pos: 8 and parses it as HourMeasurement
             for (int i = 0; i < 24; i++) {
                 List<String> measurement= list.subList(8 + i * 2, 8 + i * 2 + 2);
                 float value = 0;
                 if (!measurement.get(0).equals("")) {
+                    //Spanish data has decimals in format n,d , whereas floats require format n.d .
                     value = Float.parseFloat(measurement.get(0).replace(',', '.'));
                 }
                 measures.add(new HourMeasurement(i + 1 , value, measurement.get(1).charAt(0)));

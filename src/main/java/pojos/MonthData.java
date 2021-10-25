@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 @Data
 /**
  * Class that models the data of a whole month.
+ * @author sps169, FedericoTB
  */
 public class MonthData {
     private List<Measure> measures;

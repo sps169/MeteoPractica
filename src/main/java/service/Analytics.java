@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -25,12 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class that models all the data obtained in order to generate the output
+ * @author sps169, FedericoTB
+ */
 public class Analytics {
     private final List<MonthData> contaminationData;
     private final List<MonthData> meteorologyData;
     private List<String> contentHtml;
     private final Station station;
     private final Path uri;
+    private final long initialTime;
 
     /**
      * Constructor Method that initialize the variables and call the method generatedChart for each MonthData to generate
@@ -40,12 +46,13 @@ public class Analytics {
      * @param station that is a instance of the {@link Station} passed by argument to the program
      * @param uri that is a {@link Path} of directory passed by argument where is will be created the inform.
      */
-    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, Path uri) throws IOException {
+    public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, Path uri, long initialTime) throws IOException {
         this.contaminationData =contaminationData;
         this.meteorologyData = meteorologyData;
         this.contentHtml = new ArrayList<>();
         this.station = station;
         this.uri = uri;
+        this.initialTime = initialTime;
         generateChart(this.meteorologyData);
         generateChart(this.contaminationData);
     }
@@ -75,18 +82,19 @@ public class Analytics {
     /**
      * Method that create the body of the output html adding line to line with html tags and using the method generatorHTMLBody
      * for the content of the Data.
-     * @param initialTime that is a {@link Long} primitive with the initial time millis captured at start of the program
      */
-    public void htmlBuilder(long initialTime) {
+    public void htmlBuilder() {
         this.contentHtml.add("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<style>table,th,td{border: 1px solid black}</style>\n<title>\n"+station.getStationCity()+" Measures"+"</title>\n</head>\n<body>\n");
         this.contentHtml.add("<h1>"+this.station.getStationCity()+"</h1>\n"+"<h2>Start Date of Measures: "+getStartingDate()+"</h2>\n");
-        this.contentHtml.add("<h2>End Date of Measures: "+getEndingDate()+"</h2>\n"+"<h2>Name of Stations: "+this.station.getStationCity()+"</h2>\n<h2>Measures Information:</h2>\n");
+        this.contentHtml.add("<h2>End Date of Measures: "+getEndingDate()+"</h2>\n"+"<h2>Name of Stations: "+this.station.getStationCity()
+                + " " + this.station.getStationZone() + " (" + this.station.getStationCode() + ") " +"</h2>\n<h2>Measures Information:</h2>\n");
         this.contentHtml.add("<h2>Meteorologic Measures:</h2>");
         generatorHTMLBody(this.meteorologyData);
         this.contentHtml.add("<h2>Pollution Measures:</h2>");
         generatorHTMLBody(this.contaminationData);
         double endTime = ((double)(System.currentTimeMillis()-initialTime))/1000;
         this.contentHtml.add("<h2>This inform is generated with date "+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))+" at time "+ LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm:ss"))+" in "+endTime+" seconds</h2>\n");
+        this.contentHtml.add("<h2>By Sergio P&eacute;rez Sanz & Federico Toledo Baeza</h2>\n");
         this.contentHtml.add("</body>\n</html>");
     }
     /**
@@ -158,10 +166,10 @@ public class Analytics {
                 DefaultCategoryDataset egDataSet = new DefaultCategoryDataset();
 
                 for (Measure measure:monthData.getMeasures()) {
-                    egDataSet.addValue(measure.getDayMean(),monthData.getType().getDescription(),""+measure.getDay().getDayOfMonth());
+                    egDataSet.addValue(measure.getDayMean(),new String(monthData.getType().getDescription().getBytes("windows-1252")),""+measure.getDay().getDayOfMonth());
                 }
                 JFreeChart egChart = ChartFactory.createBarChart(new String(monthData.getType().getDescription().getBytes("windows-1252")),
-                        "Days", "Quantity", egDataSet);
+                        "Days", new String(monthData.getType().getUnit().getBytes("windows-1252")), egDataSet);
 
                 if(Files.exists(Path.of(uri+File.separator+"images"+File.separator+"gechart"+monthData.getType().getCodMagnitude()+".png"))){
                     Files.delete(Path.of(uri+File.separator+"images"+File.separator+"gechart"+monthData.getType().getCodMagnitude()+".png"));

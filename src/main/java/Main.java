@@ -7,10 +7,9 @@ import java.net.URISyntaxException;
 public class Main {
 
     public static void main (String[] args) {
-        long initialTime = System.currentTimeMillis();
         Analytics analysis = MeteoPractice.generateMeteoAnalysis(args[0], args[1]);
         if (analysis!= null) {
-            analysis.htmlBuilder(initialTime);
+            analysis.htmlBuilder();
             try {
                 analysis.generateHtml();
             } catch (IOException | URISyntaxException e) {

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * Class that models a measure and the instant it was measured at.
+ * @author sps169, FedericoTB
  */
 public class Moment {
     private LocalDateTime date;

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Class that models a magnitude
+ * @author sps169, FedericoTB
  */
 public class Magnitude {
     /**

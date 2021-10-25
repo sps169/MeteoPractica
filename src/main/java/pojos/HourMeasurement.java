@@ -8,6 +8,7 @@ import lombok.Data;
 
 /**
  * Class that models a measurement.
+ * @author sps169, FedericoTB
  */
 public class HourMeasurement {
 

@@ -8,6 +8,7 @@ import lombok.Data;
 
 /**
  * Class that models a Station.
+ * @author sps169, FedericoTB
  */
 public class Station {
     /**
