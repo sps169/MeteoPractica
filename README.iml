@@ -12,6 +12,9 @@ En esta practica realizamos la lectura filtrada de archivos .CSV con mediciones 
 y de contaminacion por estacion dada por argumento y de los datos obtenidos generamos un reporte html
 en el directorio pasado por argumento.
 
+##Video
+<a href="https://drive.google.com/file/d/1cVnSg8IjkgQDh3mnXgFyDfE1jSBoL8ml/view?usp=sharing" target="_blank">
+
 ## Autores:
 -Sergio Pérez (https://github.com/sps169)
 -Federico Toledo (https://github.com/FedericoTB)
