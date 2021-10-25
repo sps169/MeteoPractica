@@ -15,7 +15,7 @@ en el directorio pasado por argumento.
 ## Repositorio Original
 https://github.com/sps169/MeteoPractica/
 
-##Video
+## Video
 https://drive.google.com/file/d/1cVnSg8IjkgQDh3mnXgFyDfE1jSBoL8ml/view?usp=sharing
 
 ## Autores:
