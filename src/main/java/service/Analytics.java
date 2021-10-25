@@ -45,6 +45,8 @@ public class Analytics {
      * @param meteorologyData that is a List of {@link MonthData} of meteorology data.
      * @param station that is a instance of the {@link Station} passed by argument to the program
      * @param uri that is a {@link Path} of directory passed by argument where is will be created the inform.
+     * @param initialTime long used to measure time of execution
+     * @throws IOException when the method write of {@link File} fails to write
      */
     public Analytics (List<MonthData> contaminationData, List<MonthData> meteorologyData, Station station, Path uri, long initialTime) throws IOException {
         this.contaminationData =contaminationData;
@@ -60,8 +62,8 @@ public class Analytics {
     /**
      * Method that create the output html with each line of the List of String contentHtml and open the default system web browser with him.
      * If the file existed before is deleted. If the sepator char is of the path is \ is replaced for /.
-     * @throws IOException when the method write of {@link File}> fails to write
-     * @throws URISyntaxException when the method browse of {@link Desktop}> fails to resolve the syntax of the uri
+     * @throws IOException when the method write of {@link File} fails to write
+     * @throws URISyntaxException when the method browse of {@link Desktop} fails to resolve the syntax of the uri
      */
     public void generateHtml() throws IOException, URISyntaxException {
         String filePath = this.uri + File.separator + station.getStationCity()+"-"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-uuuu"))+".html";
@@ -137,7 +139,7 @@ public class Analytics {
      * Method that generate the charts using JFreeChart each measure
      * type(Histogram for Precipitacion type, BarChart for the rest of types).
      * @param monthDataList that is a {@link List} of {@link MonthData} with the data of the measures readied
-     * @throws IOException when the method createFile of {@link Files}> fails to find the parent
+     * @throws IOException when the method createFile of {@link Files} fails to find the parent
      * directory of the file to create
      */
     public void generateChart(List<MonthData> monthDataList) throws IOException {

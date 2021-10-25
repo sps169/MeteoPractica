@@ -23,11 +23,11 @@ public class DataReading {
 
     /**
      * Method that receives the String path where the file is located
-     * and the {@link Charset} it is encoded with and returns a {@link Stream<String>}
+     * and the {@link Charset} it is encoded with and returns a {@link Stream} of {@link String}
      * containing its lines.
      * @param path {@link String} that contains the URI of the file.
      * @param charset {@link Charset} of the file.
-     * @return {@link Stream<String>} if the file is readable, null Stream otherwise.
+     * @return {@link Stream} of {@link String} if the file is readable, null Stream otherwise.
      */
     public static Stream<String> getFile(String path, Charset charset){
         Stream<String> result = null;
@@ -42,7 +42,7 @@ public class DataReading {
     /**
      * Method that deletes a directory and EVERYTHING INSIDE OF IT.
      * @param path {@link Path} to be erased.
-     * @throws {@link IOException} if path can't be accessed.
+     * @throws IOException if path can't be accessed.
      */
     private static void deleteDirectory(Path path) throws IOException {
         if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -118,7 +118,7 @@ public class DataReading {
      * @param station {@link Station} whose data we want to obtain.
      * @param file {@link String} containing the URI of the csv data file.
      * @param charset {@link Charset} defining the charset of the file to be read.
-     * @return {@link Stream<String>} containing the lines filtered by station.
+     * @return {@link Stream} of {@link String} containing the lines filtered by station.
      */
     public static Stream<String> getStationDataStream (Station station, String file, Charset charset)
     {
@@ -127,7 +127,7 @@ public class DataReading {
     }
 
     /**
-     * Method that parses a {@link Stream<String>} containing data lines into
+     * Method that parses a {@link Stream} of {@link String} containing data lines into
      * a {@link List} of {@link Measure}. If the stream is empty, the list is returned empty.
      * @param data {@link Stream} of station data.
      * @return {@link List} of {@link Measure}

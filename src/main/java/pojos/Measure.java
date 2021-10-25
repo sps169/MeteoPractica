@@ -27,7 +27,7 @@ public class Measure {
     private LocalDate day;
 
     /**
-     * List of {@HourMeasurement} of a day. Should never have more than 24 elements.
+     * List of {@link HourMeasurement} of a day. Should never have more than 24 elements.
      */
     private List<HourMeasurement> dayMeasurements;
 
