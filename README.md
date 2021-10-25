@@ -4,7 +4,7 @@ Practica 1
 
 Tema 01 Streams, Ficheros y Expresiones Regulares. 2DAM. Curso 2021/2022.
 
-![imagen][https://ecdn.teacherspayteachers.com/thumbitem/Bring-Your-Own-Device-Parent-Letter-1416476684/original-348216-1.jpg]
+![](https://ecdn.teacherspayteachers.com/thumbitem/Bring-Your-Own-Device-Parent-Letter-1416476684/original-348216-1.jpg)
 
 ## Contenido
 
@@ -16,7 +16,7 @@ en el directorio pasado por argumento.
 https://github.com/sps169/MeteoPractica/
 
 ##Video
-<a href="https://drive.google.com/file/d/1cVnSg8IjkgQDh3mnXgFyDfE1jSBoL8ml/view?usp=sharing" target="_blank"></a>
+https://drive.google.com/file/d/1cVnSg8IjkgQDh3mnXgFyDfE1jSBoL8ml/view?usp=sharing
 
 ## Autores:
 -Sergio Pérez (https://github.com/sps169)
