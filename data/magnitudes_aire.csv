@@ -1,0 +1,14 @@
+1;Dióxido de azufre;38;Fluorescencia ultravioleta;µg/m³;microgramos por metro cúbico;
+6;Monóxido de carbono;48;Espectrometría infrarroja no dispersiva;mg/m³;miligramos por metro cúbico;
+7;Monóxido de nitrógeno;8;Quimioluminiscencia;µg/m³;microgramos por metro cúbico;
+8;Dióxido de nitrógeno;8;Quimioluminiscencia;µg/m³;microgramos por metro cúbico;
+9;Partículas en suspensión menor que PM2,5;49;Absorción beta;µg/m³;microgramos por metro cúbico;
+10;Partículas en suspensión menor que PM10 49;Absorción beta;µg/m³;microgramos por metro cúbico;
+12;Óxidos de nitrógeno;8;Quimioluminiscencia;µg/m³;microgramos por metro cúbico;
+14;Ozono;6;Absorción ultravioleta;µg/m³;microgramos por metro cúbico;
+20;Tolueno;59;Cromatografía de gases;µg/m³;microgramos por metro cúbico;
+22;Black Carbon;7;Absorción de luz;µg/m³;microgramos por metro cúbico;
+30;Benceno;59;Cromatografía de gases;µg/m³;microgramos por metro cúbico;
+42;Hidrocarburos totales;2;Ionización llama;mg/m³;miligramos por metro cúbico;
+44;Hidrocarburos no metánicos;2;Ionización llama;mg/m³;miligramos por metro cúbico;
+431;MetaParaXileno;59;Cromatografía de gases;µg/m³;microgramos por metro cúbico;
