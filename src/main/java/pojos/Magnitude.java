@@ -9,13 +9,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 /**
- * Class that models a data magnitude.
- * @serialField codMagnitude String code that represents the magnitud.
- * @serialField description String description of the magnitude represented.
- * @serialField unit String unit in which the magnitude is measured.
+ * Class that models a magnitude
+ * @author sps169, FedericoTB
  */
 public class Magnitude {
+    /**
+     * Stores a numeric code representing the magnitude
+     */
     private String codMagnitude;
+
+    /**
+     * Description of the magnitude
+     */
     private String description;
+
+    /**
+     * Unit of the magnitude
+     */
     private String unit;
 }

@@ -2,12 +2,15 @@ package pojos;
 
 import lombok.Data;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+/**
+ * Class that models the data of a whole month.
+ * @author sps169, FedericoTB
+ */
 public class MonthData {
     private List<Measure> measures;
     private Magnitude type;
@@ -16,8 +19,13 @@ public class MonthData {
     private LocalDate startDayMeasure;
     private LocalDate endDayMeasure;
     private double meanValueOfMeasures;
-    /* todo graph */
 
+    /**
+     * Full Constructor for {@link MonthData}. Generates max, min, mean and starting and ending dates
+     * out of the list of measurements.
+     * @param measures {@link List} of {@link Measure}
+     * @param type {@link Magnitude} of the measurements.
+     */
     public MonthData(List<Measure> measures, Magnitude type) {
         this.measures = measures;
         if (measures.size() != 0) {
